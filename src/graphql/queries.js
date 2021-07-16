@@ -1,149 +1,149 @@
 import { gql } from "@apollo/client";
 
-export const getKartons = gql`
-  query getKartons {
-    getKartons {
+export const getMedicalRecords = gql`
+  query getMedicalRecords {
+    getMedicalRecords {
       id
-      ime
-      prezime
+      name
+      surname
       JMBG
-      pol
-      datumrodjenja
-      telefon
+      gender
+      dateofbirth
+      phonenumber
+      email
+    }
+  }
+`;
+//bio je getKartonGraph
+export const getMedicalRecordById = gql`
+  query getMedicalRecordById($id: ID!) {
+    getMedicalRecordById(id: $id) {
+      id
+      name
+      surname
+      JMBG
+      gender
+      dateofbirth
+      phonenumber
       email
     }
   }
 `;
 
-export const getKartonGraph = gql`
-  query getKartonById($id: ID!) {
-    getKartonById(id: $id) {
+export const getSamples = gql`
+  query getSamples {
+    getSamples {
       id
-      ime
-      prezime
-      JMBG
-      pol
-      datumrodjenja
-      telefon
-      email
-    }
-  }
-`;
-
-export const getUzorci = gql`
-  query getUzoraks {
-    getUzoraks {
-      id
-      potrebnirezultati
-      karton {
+      requiredresults
+      medicalrecord {
         id
-        ime
-        prezime
+        name
+        surname
         JMBG
-        pol
-        datumrodjenja
-        telefon
+        gender
+        dateofbirth
+        phonenumber
         email
       }
-      tipuzorka {
+      sampletype {
         id
-        naziv
-        opis
+        name
+        description
       }
 
-      doktor {
+      doctor {
         id
-        specijalnost
+        specialty
         JMBG
-        ime
-        prezime
+        name
+        surname
       }
     }
   }
 `;
 
-export const getParam = gql`
-  query getParametars {
+export const getParameters = gql`
+  query getParameters {
     getParametars {
       id
-      naziv
-      referentnevrednosti
+      name
+      referencevalues
     }
   }
 `;
 //uzimamo donji naziv a ne query pa naziv, a ovo export const, koristimo u usequery
-export const getRezultats = gql`
-  query getRezultats {
+export const getResults = gql`
+  query getResults {
     getResults {
       id
-      posiljalac
-      datumupisa
-      uzorak {
+      sender
+      dateofentry
+      sample {
         id
-        potrebnirezultati
-        karton {
+        requiredresults
+        medicalrecord {
           id
-          ime
-          prezime
+          name
+          surname
           JMBG
-          pol
-          datumrodjenja
-          telefon
+          gender
+          dateofbirth
+          phonenumber
           email
         }
-        tipuzorka {
+        sampletype {
           id
-          naziv
-          opis
+          name
+          description
         }
 
-        doktor {
+        doctor {
           id
-          specijalnost
+          specialty
           JMBG
-          ime
-          prezime
+          name
+          surname
         }
       }
     }
   }
 `;
-
-export const getListuIzvestaja = gql`
-query getIzvestajs {
-  getIzvestajs {
-    id
-    datumstampanja
-    napomena
-    doktor {
+// getListuIzvestaja
+export const getReports = gql`
+  query getReports {
+    getReports {
       id
-      specijalnost
-      JMBG
-      ime
-      prezime
-    }
-    karton{
-       id
-      ime
-      prezime
-      JMBG
-      pol
-      datumrodjenja
-      telefon
-      email
+      dateofprinting
+      note
+      doctor {
+        id
+        specialty
+        JMBG
+        name
+        surname
+      }
+      medicalrecord {
+        id
+        name
+        surname
+        JMBG
+        gender
+        dateofbirth
+        phonenumber
+        email
+      }
     }
   }
-}
 `;
 
-export const getD = gql`
+export const getDoctors = gql`
   query getDoctors {
     getDoctors {
       id
-      specijalnost
+      specialty
       JMBG
-      ime
-      prezime
+      name
+      surname
     }
   }
 `;

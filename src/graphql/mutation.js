@@ -1,185 +1,185 @@
 import { gql } from "@apollo/client";
 
-export const NewRezultatMutation = gql`
-  mutation newResult($input: newRezultatInput) {
+export const NewResultMutation = gql`
+  mutation newResult($input: newResultInput) {
     newResult(input: $input) {
       id
-      posiljalac
-      datumupisa
-      uzorak {
+      sender
+      dateofentry
+      sample {
         id
-        potrebnirezultati
-        karton {
+        requiredresults
+        medicalrecord {
           id
-          ime
-          prezime
+          name
+          surname
           JMBG
-          pol
-          datumrodjenja
-          telefon
+          gender
+          dateofbirth
+          phonenumber
           email
         }
-        tipuzorka {
+        sampletype {
           id
-          naziv
-          opis
+          name
+          description
         }
 
-        doktor {
+        doctor {
           id
-          specijalnost
+          specialty
           JMBG
-          ime
-          prezime
+          name
+          surname
         }
       }
     }
   }
 `;
 
-export const DeleteRezultatMutation = gql`
+export const DeleteResultMutation = gql`
   mutation deleteResult($id: ID!) {
     deleteResult(id: $id) {
       id
-      posiljalac
-      datumupisa
-      uzorak {
+      sender
+      dateofentry
+      sample {
         id
-        potrebnirezultati
-        karton {
+        requiredresults
+        medicalrecord {
           id
-          ime
-          prezime
+          name
+          surname
           JMBG
-          pol
-          datumrodjenja
-          telefon
+          gender
+          dateofbirth
+          phonenumber
           email
         }
-        tipuzorka {
+        sampletype {
           id
-          naziv
-          opis
+          name
+          description
         }
 
-        doktor {
+        doctor {
           id
-          specijalnost
+          specialty
           JMBG
-          ime
-          prezime
+          name
+          surname
         }
       }
     }
   }
 `;
 
-export const EditRezultatMutation = gql`
-  mutation editResult($input: editRezultatInput) {
+export const EditResultMutation = gql`
+  mutation editResult($input: editResultInput) {
     editResult(input: $input) {
       id
-      posiljalac
-      datumupisa
-      uzorak {
+      sender
+      dateofentry
+      sample {
         id
-        potrebnirezultati
-        karton {
+        requiredresults
+        medicalrecord {
           id
-          ime
-          prezime
+          name
+          surname
           JMBG
-          pol
-          datumrodjenja
-          telefon
+          gender
+          dateofbirth
+          phonenumber
           email
         }
-        tipuzorka {
+        sampletype {
           id
-          naziv
-          opis
+          name
+          description
         }
 
-        doktor {
+        doctor {
           id
-          specijalnost
+          specialty
           JMBG
-          ime
-          prezime
+          name
+          surname
         }
       }
     }
   }
 `;
 
-export const DeleteIzvestaj = gql`
-  mutation deleteIzvestaj($id: ID!) {
-    deleteIzvestaj(id: $id) {
+export const DeleteReport = gql`
+  mutation deleteReport($id: ID!) {
+    deleteReport(id: $id) {
       id
-      datumstampanja
-      napomena
-      doktor {
+      dateofprinting
+      note
+      doctor {
         id
-        specijalnost
+        specialty
         JMBG
-        ime
-        prezime
+        name
+        surname
       }
     }
   }
 `;
 
-export const SacuvajIzvestaj = gql`
-  mutation newIzvestaj($input: newIzvestajInput) {
-    newIzvestaj(input: $input) {
+export const SaveReport = gql`
+  mutation newReport($input: newReportInput) {
+    newReport(input: $input) {
       id
-      datumstampanja
-      napomena
-      doktor {
+      dateofprinting
+      note
+      doctor {
         id
-        specijalnost
+        specialty
         JMBG
-        ime
-        prezime
+        name
+        surname
       }
-      karton {
+      medicalrecord {
         id
-        ime
-        prezime
+        name
+        surname
         JMBG
-        pol
-        datumrodjenja
-        telefon
+        gender
+        dateofbirth
+        phonenumber
         email
       }
     }
   }
 `;
 
-export const SacuvajStavku = gql`
-  mutation newStavka($input: newStavkaInput) {
-    newStavka(input: $input) {
+export const SaveReportItem = gql`
+  mutation newReportItem($input: newReportItemInput) {
+    newReportItem(input: $input) {
       id
-      rb
-      indikator
-      rezultatparametra
+      serialnumber
+      indicator
+      parameterresult
       status
-      parametar {
+      parameter {
         id
-        naziv
-        referentnevrednosti
+        name
+        referencevalues
       }
-      izvestaj {
+      report {
         id
-        datumstampanja
-        napomena
-        karton {
+        dateofprinting
+        note
+        medicalrecord {
           id
-          ime
-          prezime
+          name
+          surname
           JMBG
-          pol
-          datumrodjenja
-          telefon
+          gender
+          dateofbirth
+          phonenumber
           email
         }
       }
@@ -187,38 +187,32 @@ export const SacuvajStavku = gql`
   }
 `;
 
-export const SacuvajKarton = gql`
-  mutation newKarton($input: newKartonInput) {
-    newKarton(input: $input) {
+export const SaveMedicalRecord = gql`
+  mutation newMedicalRecord($input: newMedicalRecordInput) {
+    newMedicalRecord(input: $input) {
       id
-      ime
-      prezime
+      name
+      surname
       JMBG
-      pol
-      datumrodjenja
-      telefon
+      gender
+      dateofbirth
+      phonenumber
       email
     }
   }
 `;
 
-export const EditKarton = gql`
-  mutation editKarton($input: editKartonInput) {
-    editKarton(input: $input) {
+export const EditMedicalRecord = gql`
+  mutation editMedicalRecord($input: editMedicalRecordInput) {
+    editMedicalRecord(input: $input) {
       id
-      ime
-      prezime
+      name
+      surname
       JMBG
-      pol
-      datumrodjenja
-      telefon
+      gender
+      dateofbirth
+      phonenumber
       email
     }
-  }
-`;
-
-export const EditStavka = gql`
-  mutation editStavka($input: editStavkaInput) {
-    editStavka(input: $input)
   }
 `;
