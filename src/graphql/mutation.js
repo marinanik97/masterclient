@@ -216,3 +216,9 @@ export const EditMedicalRecord = gql`
     }
   }
 `;
+
+export const EditReportItem = gql`
+  mutation editReportItem($input: editReportItemInput) {
+    editReportItem(input: $input)
+  }
+`;

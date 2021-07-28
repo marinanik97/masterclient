@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style/CreateType.css";
 import MaterialTable from "material-table";
 import { useQuery, useMutation } from "@apollo/client";
-import { getRezultats, getUzorci } from "../graphql/queries";
+import { getResults, getSamples } from "../graphql/queries";
 import {
-  NewRezultatMutation,
-  DeleteRezultatMutation,
-  EditRezultatMutation,
+  NewResultMutation,
+  DeleteResultMutation,
+  EditResultMutation,
 } from "../graphql/mutation";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   Button,
@@ -20,70 +19,56 @@ import {
 } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import { formatDate } from "../utils/utlis";
 import toast from "../utils/toast";
 
 const CreateType = () => {
   const [uzorci, setUzorci] = React.useState([]);
   const [rezultati, setRezultati] = React.useState([]);
   const [posiljalac, setPosiljalac] = useState("");
-  const { loading, error, data } = useQuery(getRezultats, {
+  const { error } = useQuery(getResults, {
     onCompleted: setRezultati,
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const { loading: loadingU, error: errorU, data: dataU } = useQuery(
-    getUzorci,
-    { onCompleted: setUzorci }
-  );
+  const {} = useQuery(getSamples, { onCompleted: setUzorci });
   const [datumupisa, setDatumupisa] = useState(new Date());
   const [uzorak, setUzorak] = useState();
-  const [err, setErr] = useState();
-  const [newResult, { loading: loadingRez, error: errorRez }] = useMutation(
-    NewRezultatMutation,
-    {
-      refetchQueries: [{ query: getRezultats }],
-      onCompleted: ({ newResult }) => {
-        toast.success("Rezultat je sačuvan");
-      },
-    }
-  );
+  const [setErr] = useState();
+  const [newResult] = useMutation(NewResultMutation, {
+    refetchQueries: [{ query: getResults }],
+    onCompleted: () => {
+      toast.success("Rezultat je sačuvan");
+    },
+  });
 
-  const [
-    deleteResult,
-    { loading: loadingRezDel, error: errorRezDel },
-  ] = useMutation(DeleteRezultatMutation, {
-    refetchQueries: [{ query: getRezultats }],
-    onCompleted: ({ deleteResult }) => {
+  const [deleteResult] = useMutation(DeleteResultMutation, {
+    refetchQueries: [{ query: getResults }],
+    onCompleted: () => {
       toast.success("Rezultat je obrisan");
     },
   });
 
-  const [
-    editResult,
-    { loading: loadingRezEdit, error: errorRezEdit },
-  ] = useMutation(EditRezultatMutation, {
-    onCompleted: ({ editResult }) => {
+  const [editResult] = useMutation(EditResultMutation, {
+    onCompleted: () => {
       toast.success("Rezultat je izmenjen");
     },
   });
 
-  const [columns, setColumns] = useState([
+  const [columns] = useState([
     { title: "Posiljalac", field: "posiljalac" },
     { title: "Datum upisa", field: "datumupisa" },
   ]);
 
   const renderUzorci = () => {
-    if (uzorci.getUzoraks) {
-      console.log(uzorci.getUzoraks);
+    if (uzorci.getSamples) {
+      console.log(uzorci.getSamples);
       console.log(rezultati.getResults);
       console.log(rezultati);
-      return uzorci.getUzoraks.map((uzorak, index) => {
+      return uzorci.getSamples.map((uzorak, index) => {
         return (
           <MenuItem key={index + "|"} value={uzorak.id}>
             {uzorak.karton.ime + " " + uzorak.karton.prezime}
@@ -100,7 +85,7 @@ const CreateType = () => {
     setUzorak(e.target.value);
     console.log(uzorak);
   };
-  if (rezultati.length != 0) {
+  if (rezultati.length !== 0) {
     console.log(rezultati);
     let i;
 
@@ -172,7 +157,7 @@ const CreateType = () => {
           data={editableData}
           editable={{
             onRowUpdate: (newData, oldData) =>
-              new Promise((resolve, reject) => {
+              new Promise((resolve) => {
                 const id = oldData.id;
                 const posiljalac = newData.posiljalac;
                 const datumupisa = newData.datumupisa;
@@ -187,7 +172,7 @@ const CreateType = () => {
                 }, 1000);
               }),
             onRowDelete: (oldData) => {
-              return new Promise((resolve, reject) => {
+              return new Promise((resolve) => {
                 const id = oldData.id;
                 console.log();
                 setTimeout(() => {

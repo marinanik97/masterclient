@@ -1,32 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style/CreateType.css";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { getKartons } from "../graphql/queries";
+import { getMedicalRecords } from "../graphql/queries";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { FormControl, InputLabel, Button } from "@material-ui/core";
 
-const Card = (navigation) => {
-  const [cards, setCards] = React.useState([]);
+const Card = () => {
+  const [cards] = React.useState([]);
   const [kartoni, setKartoni] = React.useState([]);
   const [getRedirect, setRedirect] = useState();
   const [getOption, setOption] = useState();
-  const location = useLocation();
-  const { loading, error, data } = useQuery(getKartons, {
+  const {} = useQuery(getMedicalRecords, {
     onCompleted: setKartoni,
   });
 
-  const getCards = () => {
-    fetch("http://localhost:9000/kartoni")
-      .then((response) => response.json())
-      .then((response) => setCards(response))
-      .catch((err) => console.error(err));
-  };
-
-  // useEffect(() => {
-  //   getCards();
-  // }, []);
+  // const getCards = () => {
+  //   fetch("http://localhost:9000/kartoni")
+  //     .then((response) => response.json())
+  //     .then((response) => setCards(response))
+  //     .catch((err) => console.error(err));
+  // };
 
   if (getRedirect) {
     return (
@@ -38,10 +33,10 @@ const Card = (navigation) => {
       />
     );
   }
-
+  // sta ako nema izvestaja, kartona ili bilo cega? handling
   const renderCards = () => {
-    if (kartoni.getKartons) {
-      return kartoni.getKartons.map((karton, index) => {
+    if (kartoni.getMedicalRecords) {
+      return kartoni.getMedicalRecords.map((karton, index) => {
         return (
           <MenuItem key={index + "|"} value={karton.id}>
             {karton.ime + " " + karton.prezime}

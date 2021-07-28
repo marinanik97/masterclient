@@ -1,32 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./style/CreateReport.css";
 import MaterialTable from "material-table";
-import { refromatDate } from "../utils/utlis.js";
 import toast from "../utils/toast";
-import { useQuery, client, useMutation } from "@apollo/client";
-import { getListuIzvestaja } from "../graphql/queries";
-import { DeleteIzvestaj, EditStavka } from "../graphql/mutation";
+import { useQuery, useMutation } from "@apollo/client";
+import { getReports } from "../graphql/queries";
+import { DeleteReport, EditReportItem } from "../graphql/mutation";
 
 export default function ReportList() {
-  const [getIzvestaji, setIzvestaji] = useState([]);
   const [izvestaji, setIzvestajiGraph] = useState([]);
-  const [dataRender, setDataForRender] = useState([]);
-  const [izvestajiGetData, seti] = useState([]);
   const [
-    deleteIzvestaj,
-    { loading: loadingIzv, error: errorIzv },
-  ] = useMutation(DeleteIzvestaj, {
-    refetchQueries: [{ query: getListuIzvestaja }],
+    deleteReport,
+  ] = useMutation(DeleteReport, {
+    refetchQueries: [{ query: getReports }],
 
-    onCompleted: ({ deleteIzvestaj }) => {
+    onCompleted: () => {
       toast.success("Izvestaj je obrisan");
     },
   });
   const [
-    editStavka,
-    { loading: loadingStavka, error: errorStavka },
-  ] = useMutation(EditStavka);
-  const { loading: loadingQue, error, data } = useQuery(getListuIzvestaja, {
+    editReportItem,
+  ] = useMutation(EditReportItem);
+  const { loading: loadingQue } = useQuery(getReports, {
     onCompleted: setIzvestajiGraph,
     notifyOnNetworkStatusChange: true,
 
@@ -40,7 +34,7 @@ export default function ReportList() {
   //     }
   // },[data])
 
-  if (izvestaji.length != 0) {
+  if (izvestaji.length !== 0) {
     console.log(izvestaji);
     var editableData = izvestaji.getIzvestajs.map((o) => ({ ...o }));
     let i;
@@ -100,7 +94,7 @@ export default function ReportList() {
         ]}
         editable={{
           onRowDelete: (oldData) => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
               setTimeout(() => {
                 // deleteIzvestaj({
                 //   variables: { input: { id } },
@@ -111,7 +105,7 @@ export default function ReportList() {
                 //   {
                 //     variables: { id },
                 //   }
-                deleteIzvestaj(
+                deleteReport(
                   {
                     variables: { id },
                   }
@@ -119,7 +113,7 @@ export default function ReportList() {
                 resolve();
                const izvestaj = id;
                const status = "brisanje";
-               editStavka({
+               editReportItem({
                 variables: { input: { izvestaj, status} },
               })
               }, 1000);

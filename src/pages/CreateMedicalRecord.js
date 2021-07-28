@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style/CreateType.css";
 import MaterialTable from "material-table";
 import { useQuery, useMutation } from "@apollo/client";
 import { getMedicalRecords } from "../graphql/queries";
 import { EditMedicalRecord, SaveMedicalRecord } from "../graphql/mutation";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button, TextField } from "@material-ui/core";
 import {
@@ -26,7 +25,7 @@ const CreateMedicalRecord = () => {
   const [email, setEmail] = useState("");
 
   const [err, setErr] = useState();
-  const [columns, setColumns] = useState([
+  const [columns] = useState([
     // { title: "KartonID", field: "id", editable: "never" },
     { title: "Ime", field: "ime" },
     { title: "Prezime", field: "prezime" },
@@ -36,31 +35,27 @@ const CreateMedicalRecord = () => {
     { title: "Telefon", field: "telefon" },
     { title: "Email", field: "email" },
   ]);
-  const { loading, error, data } = useQuery(getMedicalRecords, {
+  const { loading } = useQuery(getMedicalRecords, {
     onCompleted: setKartoni,
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
 
-  const [newKarton, { loading: loadingKarton, error: errorKarton }] =
-    useMutation(SaveMedicalRecord, {
-      refetchQueries: [{ query: getMedicalRecords }],
-      onCompleted: ({ newKarton }) => {
-        toast.success("Karton je sačuvan");
-      },
-    });
+  const [newKarton] = useMutation(SaveMedicalRecord, {
+    refetchQueries: [{ query: getMedicalRecords }],
+    onCompleted: () => {
+      toast.success("Karton je sačuvan");
+    },
+  });
 
-  const [
-    editMedicalRecord,
-    { loading: loadingMedicalRecordEdit, error: errorMedicalRecordEdit },
-  ] = useMutation(EditMedicalRecord, {
-    onCompleted: ({ editMedicalRecord }) => {
+  const [editMedicalRecord] = useMutation(EditMedicalRecord, {
+    onCompleted: () => {
       toast.success("Karton je izmenjen");
     },
   });
   if (loading) return "Ucitavanje kartona...";
 
-  if (kartoni.length != 0) {
+  if (kartoni.length !== 0) {
     var editableData = kartoni.getMedicalRecords.map((o) => ({ ...o }));
     let i;
     for (i = 0; i < editableData.length; i++) {
