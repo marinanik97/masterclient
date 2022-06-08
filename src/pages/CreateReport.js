@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import "./style/CreateReport.css";
 import TextField from "@material-ui/core/TextField";
 import { NetworkStatus, useQuery, useMutation } from "@apollo/client";
-import { getKartons, getD, getParam, getKartonGraph } from "../graphql/queries";
+import { getD, getParam, getKartonGraph } from "../graphql/queries";
 import { SacuvajIzvestaj, SacuvajStavku } from "../graphql/mutation";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,7 +11,6 @@ import Select from "@material-ui/core/Select";
 import Grid from "@material-ui/core/Grid";
 import MaterialTable from "material-table";
 import { useLocation } from "react-router-dom";
-import { refromatDate, formatDate } from "../utils/utlis.js";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
@@ -41,14 +40,9 @@ const CreateReport = () => {
   const [parametarforma, setParametar] = useState();
 
   const [err, setErr] = useState();
-  const [parametarid, setParamid] = useState(0);
-  const [naziv, setNaziv] = useState("");
   const [rezultatparametra, setRezP] = useState("");
   const [indikator, setIndikator] = useState("");
-  const [rf, setRf] = useState("");
-  const [jd, setJd] = useState("");
   const [dummyReports, setDummyReports] = useState([]);
-  const [stavkeIzv, setStavkeIzv] = useState([]);
   const [noviIzvestaj, setNoviIzvestaj] = useState([]);
   const [columns, setColums] = useState([
     //   { title: "ParametarID", field: "id" },
@@ -67,9 +61,8 @@ const CreateReport = () => {
     }
   );
 
-  const [newStavka, { loading: loadingSta, error: errorSta }] = useMutation(
-    SacuvajStavku
-  );
+  const [newStavka, { loading: loadingSta, error: errorSta }] =
+    useMutation(SacuvajStavku);
   const id = location.state.from.id;
   console.log(id);
   const {

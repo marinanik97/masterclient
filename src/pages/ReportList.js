@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./style/CreateReport.css";
 import MaterialTable from "material-table";
-import { refromatDate } from "../utils/utlis.js";
 import toast from "../utils/toast";
-import { useQuery, client, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { getListuIzvestaja } from "../graphql/queries";
 import { DeleteIzvestaj, EditStavka } from "../graphql/mutation";
 
 export default function ReportList() {
-  const [getIzvestaji, setIzvestaji] = useState([]);
   const [izvestaji, setIzvestajiGraph] = useState([]);
-  const [dataRender, setDataForRender] = useState([]);
-  const [izvestajiGetData, seti] = useState([]);
-  const [
-    deleteIzvestaj,
-    { loading: loadingIzv, error: errorIzv },
-  ] = useMutation(DeleteIzvestaj, {
-    refetchQueries: [{ query: getListuIzvestaja }],
+  const [deleteIzvestaj, { loading: loadingIzv, error: errorIzv }] =
+    useMutation(DeleteIzvestaj, {
+      refetchQueries: [{ query: getListuIzvestaja }],
 
-    onCompleted: ({ deleteIzvestaj }) => {
-      toast.success("Izvestaj je obrisan");
-    },
-  });
-  const [
-    editStavka,
-    { loading: loadingStavka, error: errorStavka },
-  ] = useMutation(EditStavka);
-  const { loading: loadingQue, error, data } = useQuery(getListuIzvestaja, {
+      onCompleted: ({ deleteIzvestaj }) => {
+        toast.success("Izvestaj je obrisan");
+      },
+    });
+  const [editStavka, { loading: loadingStavka, error: errorStavka }] =
+    useMutation(EditStavka);
+  const {
+    loading: loadingQue,
+    error,
+    data,
+  } = useQuery(getListuIzvestaja, {
     onCompleted: setIzvestajiGraph,
     notifyOnNetworkStatusChange: true,
 
@@ -45,7 +41,7 @@ export default function ReportList() {
     var editableData = izvestaji.getIzvestajs.map((o) => ({ ...o }));
     let i;
     for (i = 0; i < editableData.length; i++) {
-      let d = editableData[i].datumstampanja.slice(0,10);
+      let d = editableData[i].datumstampanja.slice(0, 10);
       editableData[i].datumstampanja = d;
       console.log(d);
     }
@@ -111,17 +107,15 @@ export default function ReportList() {
                 //   {
                 //     variables: { id },
                 //   }
-                deleteIzvestaj(
-                  {
-                    variables: { id },
-                  }
-                );
+                deleteIzvestaj({
+                  variables: { id },
+                });
                 resolve();
-               const izvestaj = id;
-               const status = "brisanje";
-               editStavka({
-                variables: { input: { izvestaj, status} },
-              })
+                const izvestaj = id;
+                const status = "brisanje";
+                editStavka({
+                  variables: { input: { izvestaj, status } },
+                });
               }, 1000);
             });
           },
