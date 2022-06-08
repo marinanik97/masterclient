@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style/CreateType.css";
 import MaterialTable from "material-table";
 import { useQuery, useMutation } from "@apollo/client";
@@ -8,7 +8,6 @@ import {
   DeleteRezultatMutation,
   EditRezultatMutation,
 } from "../graphql/mutation";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   Button,
@@ -20,12 +19,10 @@ import {
 } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import { formatDate } from "../utils/utlis";
 import toast from "../utils/toast";
 
 const CreateType = () => {
@@ -37,10 +34,11 @@ const CreateType = () => {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
   });
-  const { loading: loadingU, error: errorU, data: dataU } = useQuery(
-    getUzorci,
-    { onCompleted: setUzorci }
-  );
+  const {
+    loading: loadingU,
+    error: errorU,
+    data: dataU,
+  } = useQuery(getUzorci, { onCompleted: setUzorci });
   const [datumupisa, setDatumupisa] = useState(new Date());
   const [uzorak, setUzorak] = useState();
   const [err, setErr] = useState();
@@ -54,24 +52,20 @@ const CreateType = () => {
     }
   );
 
-  const [
-    deleteResult,
-    { loading: loadingRezDel, error: errorRezDel },
-  ] = useMutation(DeleteRezultatMutation, {
-    refetchQueries: [{ query: getRezultats }],
-    onCompleted: ({ deleteResult }) => {
-      toast.success("Rezultat je obrisan");
-    },
-  });
+  const [deleteResult, { loading: loadingRezDel, error: errorRezDel }] =
+    useMutation(DeleteRezultatMutation, {
+      refetchQueries: [{ query: getRezultats }],
+      onCompleted: ({ deleteResult }) => {
+        toast.success("Rezultat je obrisan");
+      },
+    });
 
-  const [
-    editResult,
-    { loading: loadingRezEdit, error: errorRezEdit },
-  ] = useMutation(EditRezultatMutation, {
-    onCompleted: ({ editResult }) => {
-      toast.success("Rezultat je izmenjen");
-    },
-  });
+  const [editResult, { loading: loadingRezEdit, error: errorRezEdit }] =
+    useMutation(EditRezultatMutation, {
+      onCompleted: ({ editResult }) => {
+        toast.success("Rezultat je izmenjen");
+      },
+    });
 
   const [columns, setColumns] = useState([
     { title: "Posiljalac", field: "posiljalac" },

@@ -12,7 +12,6 @@ const Card = (navigation) => {
   const [kartoni, setKartoni] = React.useState([]);
   const [getRedirect, setRedirect] = useState();
   const [getOption, setOption] = useState();
-  const location = useLocation();
   const { loading, error, data } = useQuery(getKartons, {
     onCompleted: setKartoni,
   });
@@ -23,10 +22,6 @@ const Card = (navigation) => {
       .then((response) => setCards(response))
       .catch((err) => console.error(err));
   };
-
-  // useEffect(() => {
-  //   getCards();
-  // }, []);
 
   if (getRedirect) {
     return (

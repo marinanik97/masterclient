@@ -1,40 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style/CreateType.css";
 import MaterialTable from "material-table";
 import { useQuery, useMutation } from "@apollo/client";
 import { getKartons } from "../graphql/queries";
 import { EditKarton, SacuvajKarton } from "../graphql/mutation";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import { formatDate } from "../utils/utlis";
 import toast from "../utils/toast";
 
 const CreateMedicalRecord = () => {
-  const [posiljalac, setPosiljalac] = useState("");
-  const [uzorakid, setUzorakId] = useState(0);
-  const [rezultatid, setRezultatid] = useState(0);
-  const [tipovi, setTipovi] = React.useState([]);
-  const [rezultati, setRezultati] = React.useState([]);
-  const [datumupisa, setDatumupisa] = useState(new Date());
-  const [rezultatBrisanje, setRezultatBrisanje] = useState([]);
-  const [getUzorak, setUzorak] = useState();
   const [kartoni, setKartoni] = React.useState([]);
-  const [kartonid, setKartonid] = useState(0);
   const [ime, setIme] = useState("");
   const [prezime, setPrezime] = useState("");
   const [JMBG, setJmbg] = useState("");
@@ -60,31 +41,27 @@ const CreateMedicalRecord = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const [
-    newKarton,
-    { loading: loadingKarton, error: errorKarton },
-  ] = useMutation(SacuvajKarton, {
-    refetchQueries: [{ query: getKartons }],
-    onCompleted: ({ newKarton }) => {
-      toast.success("Karton je sačuvan");
-    },
-  });
+  const [newKarton, { loading: loadingKarton, error: errorKarton }] =
+    useMutation(SacuvajKarton, {
+      refetchQueries: [{ query: getKartons }],
+      onCompleted: ({ newKarton }) => {
+        toast.success("Karton je sačuvan");
+      },
+    });
 
-  const [
-    editKarton,
-    { loading: loadingKartonEdit, error: errorKartonEdit },
-  ] = useMutation(EditKarton, {
-    onCompleted: ({ editKarton }) => {
-      toast.success("Karton je izmenjen");
-    },
-  });
+  const [editKarton, { loading: loadingKartonEdit, error: errorKartonEdit }] =
+    useMutation(EditKarton, {
+      onCompleted: ({ editKarton }) => {
+        toast.success("Karton je izmenjen");
+      },
+    });
   if (loading) return "Ucitavanje kartona...";
-  
+
   if (kartoni.length != 0) {
     var editableData = kartoni.getKartons.map((o) => ({ ...o }));
     let i;
     for (i = 0; i < editableData.length; i++) {
-      let d = editableData[i].datumrodjenja.slice(0,10);
+      let d = editableData[i].datumrodjenja.slice(0, 10);
       editableData[i].datumrodjenja = d;
       console.log(d);
     }
